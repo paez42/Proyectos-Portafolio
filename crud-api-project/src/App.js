@@ -36,11 +36,11 @@ function App() {
       ...prevState,
       [name]: value,
     }));
-    console.log(consolaSeleccionada);
   };
 
   const peticionGet = async () => {
-    await axios.get("http://localhost:5000/products/").then((res) => {
+    await axios.get("http://localhost:5000/products/")
+    .then((res) => {
       setData(res.data);
     });
   };
@@ -74,9 +74,17 @@ function App() {
       });
   };
 
-  const abrirCerrarModalInsertar = () => {
+  const peticionDelete=async()=>{
+    await axios.delete("http://localhost:5000/products/" + consolaSeleccionada.id)
+    .then(res=>{
+      setData(data.filter(consola=>consola.id!==consolaSeleccionada.id));
+      abrirCerrarModalEliminar();
+    })
+  }
+
+  const abrirCerrarModalInsertar=()=> {
     setModalInsertar(!modalInsertar);
-  };
+  }
 
   const abrirCerrarModalEditar = () => {
     setModalEditar(!modalEditar);
@@ -99,7 +107,7 @@ function App() {
     <Box
       sx={{
         position: "absolute",
-        width: 400,
+        Width: 400,
         minheight: 350,
         border: "2px solid #000",
         padding: "3px",
@@ -139,7 +147,7 @@ function App() {
         <Button
           color="primary"
           variant="contained"
-          onClick={handleClickInsertar}
+          onClick={() => peticionPost()}
           sx={{ mr: 1 }}
         >
           Insertar
@@ -153,31 +161,31 @@ function App() {
           Cancelar
         </Button>
       </Box>
-      <Typography variant="h3">Agregar Nueva Consola</Typography>
-      <TextField name="name" label="Name" onChange={handleChange} />
-      <TextField
-        name="description"
-        label="Description"
-        onChange={handleChange}
-      />
-      <TextField name="price" label="Price" onChange={handleChange} />
-      <Box>
-        <Button color="primary" onClick={() => peticionPost()}>
-          Insertar
-        </Button>
-        <Button onClick={() => abrirCerrarModalInsertar()}>Cancelar</Button>
-      </Box>
     </Box>
   );
 
   const bodyEditar = (
-    <Box>
-      <Typography variant="h3">Agregar Nueva Consola</Typography>
+    <Box
+    sx={{
+      position: "absolute",
+      Width: 400,
+      minheight: 350,
+      border: "2px solid #000",
+      padding: "3px",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "white",
+    }}
+  >
+      <Typography variant="h3">Editar Producto</Typography>
+      <Box sx={{display:"flex",flexDirection:"column",my:2, gap:2}}>
       <TextField
         name="name"
         label="Name"
         onChange={handleChange}
         value={consolaSeleccionada && consolaSeleccionada.name}
+        fullWidth={true}
       />
       <TextField
         name="description"
@@ -191,32 +199,49 @@ function App() {
         onChange={handleChange}
         value={consolaSeleccionada && consolaSeleccionada.price}
       />
-      <Box>
-        <Button color="primary" onClick={() => peticionPut()}>
+      </Box>
+      <Box sx={{display:"flex",justifyContent:"end",mr:1,mb:1, gap:1}}>
+        <Button variant="contained" color="primary" onClick={() => peticionPut()}>
           Editar
         </Button>
-        <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button variant="contained" color = "error" onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
       </Box>
     </Box>
   );
 
   const bodyEliminar = (
-    <Box>
-      <Typography>
-        Estas seguro que deseas eliminar la consola{" "}
+    <Box
+    sx={{
+      position: "absolute",
+      Width: 400,
+      minheight: 350,
+      border: "2px solid #000",
+      padding: "3px",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "white",
+    }}
+  >
+    <Box sx={{m:1}} >
+      <Typography variant="h6">
+        Estas seguro que deseas eliminar el producto con ID{" "}
         {consolaSeleccionada && consolaSeleccionada.id} ?
       </Typography>
-      <Box>
-        <Button color="primary">SI</Button>
-        <Button onClick={() => abrirCerrarModalEliminar()}>NO</Button>
+      </Box>
+      <Box sx={{display:"flex",justifyContent:"end",mr:1,mb:1, gap:1}}>
+        <Button  variant="contained" color="primary" onClick={()=>peticionDelete()}>SI</Button>
+        <Button  variant="contained" color="error" onClick={() => abrirCerrarModalEliminar()}>NO</Button>
       </Box>
     </Box>
   );
 
   return (
     <div className="App">
-      <Container>
-        <Button onClick={() => abrirCerrarModalInsertar()}>Insertar</Button>
+      <Container sx={{my:5}}>
+        <Box sx={{display:"flex",justifyContent:"end",mr:20}}>
+        <Button  variant="contained" onClick={() => abrirCerrarModalInsertar()}>Insertar</Button>
+        </Box>
         <TableContainer>
           <Table>
             <TableHead>
