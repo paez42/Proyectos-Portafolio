@@ -1,0 +1,46 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "description",
+      "description": "description",
+      "price": "123ddd"
+    },
+    {
+      "id": 2,
+      "name": "12312",
+      "description": "description123",
+      "price": 232
+    },
+    {
+      "id": 3,
+      "name": "22222",
+      "description": "awd",
+      "price": 564
+    },
+    {
+      "id": 4,
+      "name": "Product 45",
+      "description": "alñdj",
+      "price": "23232"
+    },
+    {
+      "id": 5,
+      "name": "Product 8",
+      "description": "2323wdw",
+      "price": "33"
+    },
+    {
+      "name": "maxi",
+      "description": "awkldjwkljd",
+      "price": "59",
+      "id": 6
+    },
+    {
+      "name": "awdawd",
+      "description": "adawd",
+      "price": "awdw",
+      "id": 7
+    }
+  ]
+}
