@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import {
+  Alert,
   Box,
   Button,
+  CircularProgress,
   Container,
   Modal,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +18,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
+import { useSnackbar } from "notistack";
+
 import ModeEditOutlineTwoToneIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 
@@ -23,6 +29,43 @@ function App() {
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const {enqueueSnackbar} = useSnackbar()
+
+  const handleClickInsertar = () => {
+    peticionPost();
+    enqueueSnackbar("Datos guardados correctamente",{
+      variant:"success",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "center",
+      }
+    }) 
+  };
+
+  const handleClickEditar = () => {
+    peticionPut();
+    enqueueSnackbar("Datos editados correctamente",{
+      variant:"info",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "center",
+      }
+    }) 
+  };
+
+  const handleClickEliminar = () => {
+    peticionDelete();
+    enqueueSnackbar("Datos borrados correctamente",{
+      variant:"error",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "center",
+      }
+    }) 
+  };
+
 
   const [consolaSeleccionada, setConsolaSeleccionada] = useState({
     name: "",
@@ -39,23 +82,28 @@ function App() {
   };
 
   const peticionGet = async () => {
-    await axios.get("http://localhost:5000/products/")
+    setLoading(true);
+     axios.get("http://localhost:5000/products/")
     .then((res) => {
-      setData(res.data);
-    });
+      setData(res.data);    
+    })
+    .finally(() => {setLoading(false)});
   };
 
   const peticionPost = async () => {
-    await axios
+    setLoading(true);
+     axios
       .post("http://localhost:5000/products/", consolaSeleccionada)
       .then((res) => {
         setData(data.concat(res.data));
         abrirCerrarModalInsertar();
-      });
+      })
+      .finally(() => {setLoading(false)});
   };
 
   const peticionPut = async () => {
-    await axios
+    setLoading(true);
+    axios
       .put(
         "http://localhost:5000/products/" + consolaSeleccionada.id,
         consolaSeleccionada
@@ -71,20 +119,26 @@ function App() {
         });
         setData(dataNueva);
         abrirCerrarModalEditar();
-      });
+      })
+      .finally(() => {setLoading(false)});
   };
 
-  const peticionDelete=async()=>{
-    await axios.delete("http://localhost:5000/products/" + consolaSeleccionada.id)
-    .then(res=>{
-      setData(data.filter(consola=>consola.id!==consolaSeleccionada.id));
-      abrirCerrarModalEliminar();
-    })
-  }
+  const peticionDelete = async () => {
+    setLoading(true);
+     axios
+      .delete("http://localhost:5000/products/" + consolaSeleccionada.id)
+      .then((res) => {
+        setData(
+          data.filter((consola) => consola.id !== consolaSeleccionada.id)
+        );
+        abrirCerrarModalEliminar();
+      })
+      .finally(() => {setLoading(false)});
+  };
 
-  const abrirCerrarModalInsertar=()=> {
+  const abrirCerrarModalInsertar = () => {
     setModalInsertar(!modalInsertar);
-  }
+  };
 
   const abrirCerrarModalEditar = () => {
     setModalEditar(!modalEditar);
@@ -100,6 +154,7 @@ function App() {
   };
 
   useEffect(() => {
+    setLoading(true);
     peticionGet();
   }, []);
 
@@ -117,7 +172,7 @@ function App() {
         backgroundColor: "white",
       }}
     >
-      <Typography variant="h3" textAlign={"center"}>
+      <Typography variant="h4" textAlign={"center"} mx={1}>
         Agregar Nuevo Producto
       </Typography>
       <Box
@@ -143,11 +198,13 @@ function App() {
         />
         <TextField name="price" label="Price" onChange={handleChange} />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "end" }}>
+      <Box
+        sx={{ display: "flex", justifyContent: "end", mr: 1, mb: 1, gap: 1 }}
+      >
         <Button
           color="primary"
           variant="contained"
-          onClick={() => peticionPost()}
+          onClick={handleClickInsertar}
           sx={{ mr: 1 }}
         >
           Insertar
@@ -166,81 +223,134 @@ function App() {
 
   const bodyEditar = (
     <Box
-    sx={{
-      position: "absolute",
-      Width: 400,
-      minheight: 350,
-      border: "2px solid #000",
-      padding: "3px",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "white",
-    }}
-  >
-      <Typography variant="h3">Editar Producto</Typography>
-      <Box sx={{display:"flex",flexDirection:"column",my:2, gap:2}}>
-      <TextField
-        name="name"
-        label="Name"
-        onChange={handleChange}
-        value={consolaSeleccionada && consolaSeleccionada.name}
-        fullWidth={true}
-      />
-      <TextField
-        name="description"
-        label="Description"
-        onChange={handleChange}
-        value={consolaSeleccionada && consolaSeleccionada.description}
-      />
-      <TextField
-        name="price"
-        label="Price"
-        onChange={handleChange}
-        value={consolaSeleccionada && consolaSeleccionada.price}
-      />
+      sx={{
+        position: "absolute",
+        Width: 400,
+        minheight: 350,
+        border: "2px solid #000",
+        padding: "3px",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "white",
+      }}
+    >
+      <Typography variant="h4" textAlign={"center"} mx={1}>
+        Editar Producto
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignContent: "center",
+          flexDirection: "column",
+          mx: 2,
+          my: 2,
+          gap: 1,
+        }}
+      >
+        <TextField
+          name="name"
+          label="Name"
+          onChange={handleChange}
+          value={consolaSeleccionada && consolaSeleccionada.name}
+          fullWidth={true}
+        />
+        <TextField
+          name="description"
+          label="Description"
+          onChange={handleChange}
+          value={consolaSeleccionada && consolaSeleccionada.description}
+        />
+        <TextField
+          name="price"
+          label="Price"
+          onChange={handleChange}
+          value={consolaSeleccionada && consolaSeleccionada.price}
+        />
       </Box>
-      <Box sx={{display:"flex",justifyContent:"end",mr:1,mb:1, gap:1}}>
-        <Button variant="contained" color="primary" onClick={() => peticionPut()}>
+      <Box
+        sx={{ display: "flex", justifyContent: "end", mr: 1, mb: 1, gap: 1 }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleClickEditar}
+        >
           Editar
         </Button>
-        <Button variant="contained" color = "error" onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => abrirCerrarModalEditar()}
+        >
+          Cancelar
+        </Button>
       </Box>
     </Box>
   );
 
   const bodyEliminar = (
     <Box
-    sx={{
-      position: "absolute",
-      Width: 400,
-      minheight: 350,
-      border: "2px solid #000",
-      padding: "3px",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "white",
-    }}
-  >
-    <Box sx={{m:1}} >
-      <Typography variant="h6">
-        Estas seguro que deseas eliminar el producto con ID{" "}
-        {consolaSeleccionada && consolaSeleccionada.id} ?
-      </Typography>
+      sx={{
+        position: "absolute",
+        Width: 400,
+        minheight: 350,
+        border: "2px solid #000",
+        padding: "3px",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "white",
+      }}
+    >
+      <Box sx={{ m: 1 }}>
+        <Typography variant="h6">
+          Estas seguro que deseas eliminar el producto con ID{" "}
+          {consolaSeleccionada && consolaSeleccionada.id} ?
+        </Typography>
       </Box>
-      <Box sx={{display:"flex",justifyContent:"end",mr:1,mb:1, gap:1}}>
-        <Button  variant="contained" color="primary" onClick={()=>peticionDelete()}>SI</Button>
-        <Button  variant="contained" color="error" onClick={() => abrirCerrarModalEliminar()}>NO</Button>
+      <Box
+        sx={{ display: "flex", justifyContent: "end", mr: 1, mb: 1, gap: 1 }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleClickEliminar}
+        >
+          SI
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => abrirCerrarModalEliminar()}
+        >
+          NO
+        </Button>
       </Box>
     </Box>
   );
 
   return (
     <div className="App">
-      <Container sx={{my:5}}>
-        <Box sx={{display:"flex",justifyContent:"end",mr:20}}>
-        <Button  variant="contained" onClick={() => abrirCerrarModalInsertar()}>Insertar</Button>
+      <Container sx={{ my: 5 }}>
+      {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (<>  <Box sx={{ display: "flex", justifyContent: "end", mr: 20 }}>
+          <Button
+            variant="contained"
+            onClick={() => abrirCerrarModalInsertar()}
+          >
+            Insertar
+          </Button>
         </Box>
         <TableContainer>
           <Table>
@@ -264,16 +374,29 @@ function App() {
                   <TableCell>
                     <ModeEditOutlineTwoToneIcon
                       onClick={() => seleccionarConsola(consola, "Editar")}
+                      sx={{
+                        backgroundColor: "yellow",
+                        padding: "5px",
+                        borderRadius: "50%",
+                        cursor: "pointer",
+                        mr: 1,
+                      }}
                     />
                     <DeleteForeverTwoToneIcon
                       onClick={() => seleccionarConsola(consola, "Eliminar")}
+                      sx={{
+                        backgroundColor: "red",
+                        padding: "5px",
+                        borderRadius: "50%",
+                        cursor: "pointer",
+                      }}
                     />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer>        
 
         <Modal open={modalInsertar} onClose={abrirCerrarModalInsertar}>
           {bodyInsertar}
@@ -286,6 +409,8 @@ function App() {
         <Modal open={modalEliminar} onClose={abrirCerrarModalEliminar}>
           {bodyEliminar}
         </Modal>
+          </>)}
+        
       </Container>
     </div>
   );

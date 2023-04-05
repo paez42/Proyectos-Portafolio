@@ -2,14 +2,14 @@
   "products": [
     {
       "id": 2,
-      "name": "123123332323",
+      "name": "pruebawdwd",
       "description": "description123",
       "price": 232
     },
     {
       "id": 3,
-      "name": "22222",
-      "description": "awd",
+      "name": "weui",
+      "description": "awddw3",
       "price": 564
     },
     {
@@ -25,16 +25,10 @@
       "id": 6
     },
     {
-      "name": "prueba",
-      "description": "ahora",
-      "price": "000",
+      "name": "qwd",
+      "description": "dwd",
+      "price": "wdw",
       "id": 7
-    },
-    {
-      "id": 1,
-      "name": "2323",
-      "description": "32323",
-      "price": "11111"
     }
   ]
 }
