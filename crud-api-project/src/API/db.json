@@ -2,7 +2,7 @@
   "products": [
     {
       "id": 2,
-      "name": "pruebawdwd",
+      "name": "prueba",
       "description": "description123",
       "price": 232
     },
@@ -29,6 +29,24 @@
       "description": "dwd",
       "price": "wdw",
       "id": 7
+    },
+    {
+      "name": "123",
+      "description": "123",
+      "price": "123",
+      "id": 8
+    },
+    {
+      "name": "2323",
+      "description": "33",
+      "price": "4ffsaef",
+      "id": 9
+    },
+    {
+      "name": "111",
+      "description": "111",
+      "price": "233",
+      "id": 10
     }
   ]
 }

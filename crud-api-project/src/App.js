@@ -14,6 +14,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -30,42 +31,52 @@ function App() {
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const {enqueueSnackbar} = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const handleClickInsertar = () => {
     peticionPost();
-    enqueueSnackbar("Datos guardados correctamente",{
-      variant:"success",
+    enqueueSnackbar("Datos guardados correctamente", {
+      variant: "success",
       anchorOrigin: {
         vertical: "bottom",
         horizontal: "center",
-      }
-    }) 
+      },
+    });
   };
 
   const handleClickEditar = () => {
     peticionPut();
-    enqueueSnackbar("Datos editados correctamente",{
-      variant:"info",
+    enqueueSnackbar("Datos editados correctamente", {
+      variant: "info",
       anchorOrigin: {
         vertical: "bottom",
         horizontal: "center",
-      }
-    }) 
+      },
+    });
   };
 
   const handleClickEliminar = () => {
     peticionDelete();
-    enqueueSnackbar("Datos borrados correctamente",{
-      variant:"error",
+    enqueueSnackbar("Datos borrados correctamente", {
+      variant: "error",
       anchorOrigin: {
         vertical: "bottom",
         horizontal: "center",
-      }
-    }) 
+      },
+    });
   };
-
 
   const [consolaSeleccionada, setConsolaSeleccionada] = useState({
     name: "",
@@ -83,22 +94,30 @@ function App() {
 
   const peticionGet = async () => {
     setLoading(true);
-     axios.get("http://localhost:5000/products/")
-    .then((res) => {
-      setData(res.data);    
-    })
-    .finally(() => {setLoading(false)});
+    axios
+      .get(
+        `http://localhost:5000/products/?_page=${page}`
+      )
+      .then((res) => {
+        console.log(res);
+        setData(res.data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const peticionPost = async () => {
     setLoading(true);
-     axios
+    axios
       .post("http://localhost:5000/products/", consolaSeleccionada)
       .then((res) => {
         setData(data.concat(res.data));
         abrirCerrarModalInsertar();
       })
-      .finally(() => {setLoading(false)});
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const peticionPut = async () => {
@@ -120,12 +139,14 @@ function App() {
         setData(dataNueva);
         abrirCerrarModalEditar();
       })
-      .finally(() => {setLoading(false)});
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const peticionDelete = async () => {
     setLoading(true);
-     axios
+    axios
       .delete("http://localhost:5000/products/" + consolaSeleccionada.id)
       .then((res) => {
         setData(
@@ -133,7 +154,9 @@ function App() {
         );
         abrirCerrarModalEliminar();
       })
-      .finally(() => {setLoading(false)});
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const abrirCerrarModalInsertar = () => {
@@ -156,7 +179,7 @@ function App() {
   useEffect(() => {
     setLoading(true);
     peticionGet();
-  }, []);
+  }, [page,rowsPerPage]);
 
   const bodyInsertar = (
     <Box
@@ -271,11 +294,7 @@ function App() {
       <Box
         sx={{ display: "flex", justifyContent: "end", mr: 1, mb: 1, gap: 1 }}
       >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleClickEditar}
-        >
+        <Button variant="contained" color="primary" onClick={handleClickEditar}>
           Editar
         </Button>
         <Button
@@ -330,87 +349,103 @@ function App() {
     </Box>
   );
 
+  console.log(data.length)
   return (
     <div className="App">
       <Container sx={{ my: 5 }}>
-      {loading ? (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                mt: 4,
-              }}
-            >
-              <CircularProgress />
-            </Box>
-          ) : (<>  <Box sx={{ display: "flex", justifyContent: "end", mr: 20 }}>
-          <Button
-            variant="contained"
-            onClick={() => abrirCerrarModalInsertar()}
+        {loading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mt: 4,
+            }}
           >
-            Insertar
-          </Button>
-        </Box>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Acciones</TableCell>
-              </TableRow>
-            </TableHead>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            {" "}
+            <Box sx={{ display: "flex", justifyContent: "end", mr: 20 }}>
+              <Button
+                variant="contained"
+                onClick={() => abrirCerrarModalInsertar()}
+              >
+                Insertar
+              </Button>
+            </Box>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
 
-            <TableBody>
-              {data.map((consola) => (
-                <TableRow key={consola.id}>
-                  <TableCell>{consola.id}</TableCell>
-                  <TableCell>{consola.name}</TableCell>
-                  <TableCell>{consola.description}</TableCell>
-                  <TableCell>{consola.price}</TableCell>
-                  <TableCell>
-                    <ModeEditOutlineTwoToneIcon
-                      onClick={() => seleccionarConsola(consola, "Editar")}
-                      sx={{
-                        backgroundColor: "yellow",
-                        padding: "5px",
-                        borderRadius: "50%",
-                        cursor: "pointer",
-                        mr: 1,
-                      }}
-                    />
-                    <DeleteForeverTwoToneIcon
-                      onClick={() => seleccionarConsola(consola, "Eliminar")}
-                      sx={{
-                        backgroundColor: "red",
-                        padding: "5px",
-                        borderRadius: "50%",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>        
-
-        <Modal open={modalInsertar} onClose={abrirCerrarModalInsertar}>
-          {bodyInsertar}
-        </Modal>
-
-        <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
-          {bodyEditar}
-        </Modal>
-
-        <Modal open={modalEliminar} onClose={abrirCerrarModalEliminar}>
-          {bodyEliminar}
-        </Modal>
-          </>)}
-        
+                <TableBody>
+                  {data
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((consola,index) => (
+                      <TableRow key={consola.id}>
+                        <TableCell>{consola.id}</TableCell>
+                        <TableCell>{consola.name}</TableCell>
+                        <TableCell>{consola.description}</TableCell>
+                        <TableCell>{consola.price}</TableCell>
+                        <TableCell>
+                          <ModeEditOutlineTwoToneIcon
+                            onClick={() =>
+                              seleccionarConsola(consola, "Editar")
+                            }
+                            sx={{
+                              backgroundColor: "yellow",
+                              padding: "5px",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                              mr: 1,
+                            }}
+                          />
+                          <DeleteForeverTwoToneIcon
+                            onClick={() =>
+                              seleccionarConsola(consola, "Eliminar")
+                            }
+                            sx={{
+                              backgroundColor: "red",
+                              padding: "5px",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={data.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </TableContainer>
+            <Modal open={modalInsertar} onClose={abrirCerrarModalInsertar}>
+              {bodyInsertar}
+            </Modal>
+            <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
+              {bodyEditar}
+            </Modal>
+            <Modal open={modalEliminar} onClose={abrirCerrarModalEliminar}>
+              {bodyEliminar}
+            </Modal>
+          </>
+        )}
       </Container>
     </div>
   );

@@ -54,21 +54,16 @@ const CardDetails = () => {
                                     {(() => {
                                         if (characterDetail.status === "Dead") {
                                             return (
-                                                <Chip label="Dead" color="red">
-                                                    {characterDetail.status}
-                                                </Chip>
+                                                <Chip label="Dead" color="error"/>                                     
                                             );
                                         } else if (characterDetail.status === "Alive") {
                                             return (
-                                                <Chip label="Alive" color="success">
-                                                    {characterDetail.status}
-                                                </Chip>
+                                                <Chip label="Alive" color="success" />                              
                                             );
                                         } else {
                                             return (
-                                                <Chip label="unknown" color="grey">
-                                                    {characterDetail.status}
-                                                </Chip>
+                                                <Chip label="unknown" />
+                                                 
                                             );
                                         }
                                     })()}
