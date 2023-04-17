@@ -12,7 +12,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserContext } from "../Context/UserContext";
 
 const theme = createTheme();
 
@@ -25,6 +26,16 @@ export default function SignInSide() {
       password: data.get("password"),
     });
   };
+
+  const {user, setUser} = useUserContext()
+
+  const navigate = useNavigate()
+
+  const handleLogin = () => {
+    setUser(true);
+    navigate('/dashboard')
+  }
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -97,6 +108,7 @@ export default function SignInSide() {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  onClick={handleLogin}
                 >
                   Sign In
                 </Button>

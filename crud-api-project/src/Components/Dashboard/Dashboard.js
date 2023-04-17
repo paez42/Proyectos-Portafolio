@@ -13,9 +13,10 @@ import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from '@mui/icons-material/Logout';
 import { mainListItems } from "./ListItems";
 import HomePage from "./CrudTable";
+import { useUserContext } from "../../Context/UserContext";
 
 const drawerWidth = 240;
 
@@ -71,6 +72,8 @@ function DashboardContent() {
     setOpen(!open);
   };
 
+  const { user, setUser } = useUserContext();
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -102,11 +105,14 @@ function DashboardContent() {
             >
               CRUD Table
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+
+            {user && (
+              <>
+                <IconButton color="inherit" onClick={() => setUser(false)}>
+                  <LogoutIcon />
+                </IconButton>
+              </>
+            )}
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -142,7 +148,15 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Box sx={{backgroundColor:"white", padding:1, border:"1px solid grey", borderRadius:"5px", boxShadow:"-5px 3px 5px -1px rgba(143,132,132,0.9)"}}>
+            <Box
+              sx={{
+                backgroundColor: "white",
+                padding: 1,
+                border: "1px solid grey",
+                borderRadius: "5px",
+                boxShadow: "-5px 3px 5px -1px rgba(143,132,132,0.9)",
+              }}
+            >
               <HomePage />
             </Box>
           </Container>

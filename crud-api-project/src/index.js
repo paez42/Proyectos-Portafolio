@@ -6,21 +6,24 @@ import { SnackbarProvider } from "notistack";
 
 import { router } from "./Router/Routes";
 import { RouterProvider } from "react-router-dom";
+import UserProvider from "./Context/UserContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} > 
-      <SnackbarProvider
-        maxSnack={1}
-        autoHideDuration={4000}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-      >
-        <App />
-      </SnackbarProvider>
-    </RouterProvider>
+    <UserProvider>
+      <RouterProvider router={router}>
+        <SnackbarProvider
+          maxSnack={1}
+          autoHideDuration={4000}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <App />
+        </SnackbarProvider>
+      </RouterProvider>
+    </UserProvider>
   </React.StrictMode>
 );
