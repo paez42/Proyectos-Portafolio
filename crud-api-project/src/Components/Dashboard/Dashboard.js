@@ -17,6 +17,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { mainListItems } from "./ListItems";
 import HomePage from "./CrudTable";
 import { useUserContext } from "../../Context/UserContext";
+import { logout } from "../../Config/firebase";
 
 const drawerWidth = 240;
 
@@ -72,6 +73,14 @@ function DashboardContent() {
     setOpen(!open);
   };
 
+  const handleLogout = async() => {
+    try {
+      await logout()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const { user, setUser } = useUserContext();
 
   return (
@@ -108,7 +117,7 @@ function DashboardContent() {
 
             {user && (
               <>
-                <IconButton color="inherit" onClick={() => setUser(false)}>
+                <IconButton color="inherit" onClick={handleLogout}>
                   <LogoutIcon />
                 </IconButton>
               </>

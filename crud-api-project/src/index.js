@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import { SnackbarProvider } from "notistack";
 
-import { router } from "./Router/Routes";
+import { router } from "./Config/Routes";
 import { RouterProvider } from "react-router-dom";
 import UserProvider from "./Context/UserContext";
 

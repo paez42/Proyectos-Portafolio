@@ -14,28 +14,37 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../Context/UserContext";
+import { useState } from "react";
+import { login } from "../Config/firebase";
+import { useEffect } from "react";
 
 const theme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+
+
+  const [email, setEmail] = useState("test@test.com")
+  const [password, setPassword] = useState("123456")
 
   const {user, setUser} = useUserContext()
 
   const navigate = useNavigate()
 
-  const handleLogin = () => {
-    setUser(true);
-    navigate('/dashboard')
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+     const credentialUser = await login({ email, password });
+      console.log(credentialUser);
+    } catch (error) {
+      console.log(error.code);
+      console.log(error.message);
+    }
+  };
 
+  useEffect(() => {
+    if (user) 
+    navigate("/dashboard")
+  }, [user]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -88,6 +97,8 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -98,6 +109,8 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -108,7 +121,6 @@ export default function SignInSide() {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  onClick={handleLogin}
                 >
                   Sign In
                 </Button>
