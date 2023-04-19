@@ -10,14 +10,12 @@ const UserContext = createContext();
 export default function UserContextProvider({ children }) {
   const [user, setUser] = useState(false);
 
-  console.log("UserContext");
 
   useEffect(() => {  
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log(user);
+
       setUser(user);
     });
-
     return unsubscribe;
   }, []);
 

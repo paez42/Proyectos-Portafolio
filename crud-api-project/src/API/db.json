@@ -2,14 +2,14 @@
   "products": [
     {
       "id": 2,
-      "name": "prueba",
-      "description": "description123",
+      "name": "pruebaa",
+      "description": "description122",
       "price": 232
     },
     {
       "id": 3,
       "name": "weui",
-      "description": "awddw3",
+      "description": "awddw33",
       "price": 564
     },
     {
@@ -19,28 +19,10 @@
       "price": "33"
     },
     {
-      "name": "maxi",
-      "description": "awkldjwkljd",
-      "price": "59",
+      "name": "awd",
+      "description": "awdaw",
+      "price": "awdaw",
       "id": 6
-    },
-    {
-      "name": "qwd",
-      "description": "dwd",
-      "price": "wdw",
-      "id": 7
-    },
-    {
-      "name": "123",
-      "description": "123",
-      "price": "123",
-      "id": 8
-    },
-    {
-      "name": "2323",
-      "description": "3333",
-      "price": "4ffsaef",
-      "id": 9
     }
   ]
 }

@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import {
-  Alert,
   Box,
   Button,
   CircularProgress,
   Container,
   Modal,
-  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -47,6 +45,7 @@ function HomePage() {
 
   const handleClickInsertar = () => {
     peticionPost();
+
     enqueueSnackbar("Datos guardados correctamente", {
       variant: "success",
       anchorOrigin: {
@@ -95,11 +94,8 @@ function HomePage() {
   const peticionGet = async () => {
     setLoading(true);
     axios
-      .get(
-        `http://localhost:5000/products/?_page=${page}`
-      )
+      .get(`http://localhost:5000/products/?_page=${page}`)
       .then((res) => {
-        console.log(res);
         setData(res.data);
       })
       .finally(() => {
@@ -179,7 +175,7 @@ function HomePage() {
   useEffect(() => {
     setLoading(true);
     peticionGet();
-  }, [page,rowsPerPage]);
+  }, [page, rowsPerPage]);
 
   const bodyInsertar = (
     <Box
@@ -389,7 +385,7 @@ function HomePage() {
                 <TableBody>
                   {data
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((consola,index) => (
+                    .map((consola, index) => (
                       <TableRow key={consola.id}>
                         <TableCell>{consola.id}</TableCell>
                         <TableCell>{consola.name}</TableCell>
