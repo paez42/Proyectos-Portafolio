@@ -23,7 +23,7 @@ import { useSnackbar } from "notistack";
 import ModeEditOutlineTwoToneIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 
-import { Formik, useFormik } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
 
 function HomePage() {
@@ -86,7 +86,7 @@ function HomePage() {
     price: "",
   });
 
-  const handleChangeForm = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setConsolaSeleccionada((prevState) => ({
       ...prevState,
@@ -175,23 +175,178 @@ function HomePage() {
     caso === "Editar" ? setModalEditar(true) : abrirCerrarModalEliminar();
   };
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      description: "",
-      price: "",
-    },
-    onSubmit: (formData) => {
-      console.log(formData);
-    },
-  });
-
-
   useEffect(() => {
     setLoading(true);
     peticionGet();
   }, [page, rowsPerPage]);
 
+  const bodyInsertar = (
+    <Box
+      sx={{
+        position: "absolute",
+        Width: 400,
+        minheight: 350,
+        border: "2px solid #000",
+        padding: "3px",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "white",
+      }}
+    >
+      <Typography variant="h4" textAlign={"center"} mx={1}>
+        Agregar Nuevo Producto
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignContent: "center",
+          flexDirection: "column",
+          mx: 2,
+          my: 2,
+        }}
+      >
+        <TextField
+          name="name"
+          label="Name"
+          onChange={handleChange}
+          sx={{ mb: 1 }}
+        />
+        <TextField
+          name="description"
+          label="Description"
+          onChange={handleChange}
+          sx={{ mb: 1 }}
+        />
+        <TextField name="price" label="Price" onChange={handleChange} />
+      </Box>
+      <Box
+        sx={{ display: "flex", justifyContent: "end", mr: 1, mb: 1, gap: 1 }}
+      >
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={handleClickInsertar}
+          sx={{ mr: 1 }}
+        >
+          Insertar
+        </Button>
+
+        <Button
+          color="error"
+          variant="contained"
+          onClick={() => abrirCerrarModalInsertar()}
+        >
+          Cancelar
+        </Button>
+      </Box>
+    </Box>
+  );
+
+  const bodyEditar = (
+    <Box
+      sx={{
+        position: "absolute",
+        Width: 400,
+        minheight: 350,
+        border: "2px solid #000",
+        padding: "3px",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "white",
+      }}
+    >
+      <Typography variant="h4" textAlign={"center"} mx={1}>
+        Editar Producto
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignContent: "center",
+          flexDirection: "column",
+          mx: 2,
+          my: 2,
+          gap: 1,
+        }}
+      >
+        <TextField
+          name="name"
+          label="Name"
+          onChange={handleChange}
+          value={consolaSeleccionada && consolaSeleccionada.name}
+          fullWidth={true}
+        />
+        <TextField
+          name="description"
+          label="Description"
+          onChange={handleChange}
+          value={consolaSeleccionada && consolaSeleccionada.description}
+        />
+        <TextField
+          name="price"
+          label="Price"
+          onChange={handleChange}
+          value={consolaSeleccionada && consolaSeleccionada.price}
+        />
+      </Box>
+      <Box
+        sx={{ display: "flex", justifyContent: "end", mr: 1, mb: 1, gap: 1 }}
+      >
+        <Button variant="contained" color="primary" onClick={handleClickEditar}>
+          Editar
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => abrirCerrarModalEditar()}
+        >
+          Cancelar
+        </Button>
+      </Box>
+    </Box>
+  );
+
+  const bodyEliminar = (
+    <Box
+      sx={{
+        position: "absolute",
+        Width: 400,
+        minheight: 350,
+        border: "2px solid #000",
+        padding: "3px",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "white",
+      }}
+    >
+      <Box sx={{ m: 1 }}>
+        <Typography variant="h6">
+          Estas seguro que deseas eliminar el producto con ID{" "}
+          {consolaSeleccionada && consolaSeleccionada.id} ?
+        </Typography>
+      </Box>
+      <Box
+        sx={{ display: "flex", justifyContent: "end", mr: 1, mb: 1, gap: 1 }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleClickEliminar}
+        >
+          SI
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => abrirCerrarModalEliminar()}
+        >
+          NO
+        </Button>
+      </Box>
+    </Box>
+  );
 
   return (
     <>
@@ -279,200 +434,14 @@ function HomePage() {
               />
             </TableContainer>
             <Modal open={modalInsertar} onClose={abrirCerrarModalInsertar}>
-              <Box
-                sx={{
-                  position: "absolute",
-                  Width: 400,
-                  minheight: 350,
-                  border: "2px solid #000",
-                  padding: "3px",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  backgroundColor: "white",
-                }}
-                onSubmit={formik.handleSubmit}
-              >
-                <Typography variant="h4" textAlign={"center"} mx={1}>
-                  Agregar Nuevo Producto
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignContent: "center",
-                    flexDirection: "column",
-                    mx: 2,
-                    my: 2,
-                  }}
-                >
-                  <TextField
-                    name="name"
-                    label="Name"
-                    onChange={handleChangeForm}
-                    sx={{ mb: 1 }}
-                  />
-                  <TextField
-                    name="description"
-                    label="Description"
-                    onChange={handleChangeForm}
-                    sx={{ mb: 1 }}
-                  />
-                  <TextField
-                    name="price"
-                    label="Price"
-                    onChange={handleChangeForm}
-                  />
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                    mr: 1,
-                    mb: 1,
-                    gap: 1,
-                  }}
-                >
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={handleClickInsertar}
-                    sx={{ mr: 1 }}
-                    type="submit"
-                  >
-                    Insertar
-                  </Button>
-
-                  <Button
-                    color="error"
-                    variant="contained"
-                    onClick={() => abrirCerrarModalInsertar()}
-                  >
-                    Cancelar
-                  </Button>
-                </Box>
-              </Box>
+              {bodyInsertar}
             </Modal>
-            {/* <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
-              <Box
-                sx={{
-                  position: "absolute",
-                  Width: 400,
-                  minheight: 350,
-                  border: "2px solid #000",
-                  padding: "3px",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  backgroundColor: "white",
-                }}
-              >
-                <Typography variant="h4" textAlign={"center"} mx={1}>
-                  Editar Producto
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignContent: "center",
-                    flexDirection: "column",
-                    mx: 2,
-                    my: 2,
-                    gap: 1,
-                  }}
-                >
-                  <TextField
-                    name="name"
-                    label="Name"
-                    onChange={handleChange}
-                    value={consolaSeleccionada && consolaSeleccionada.name}
-                    fullWidth={true}
-                  />
-                  <TextField
-                    name="description"
-                    label="Description"
-                    onChange={handleChange}
-                    value={
-                      consolaSeleccionada && consolaSeleccionada.description
-                    }
-                  />
-                  <TextField
-                    name="price"
-                    label="Price"
-                    onChange={handleChange}
-                    value={consolaSeleccionada && consolaSeleccionada.price}
-                  />
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                    mr: 1,
-                    mb: 1,
-                    gap: 1,
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleClickEditar}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => abrirCerrarModalEditar()}
-                  >
-                    Cancelar
-                  </Button>
-                </Box>
-              </Box>
+            <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
+              {bodyEditar}
             </Modal>
             <Modal open={modalEliminar} onClose={abrirCerrarModalEliminar}>
-              <Box
-                sx={{
-                  position: "absolute",
-                  Width: 400,
-                  minheight: 350,
-                  border: "2px solid #000",
-                  padding: "3px",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  backgroundColor: "white",
-                }}
-              >
-                <Box sx={{ m: 1 }}>
-                  <Typography variant="h6">
-                    Estas seguro que deseas eliminar el producto con ID{" "}
-                    {consolaSeleccionada && consolaSeleccionada.id} ?
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                    mr: 1,
-                    mb: 1,
-                    gap: 1,
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleClickEliminar}
-                  >
-                    SI
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => abrirCerrarModalEliminar()}
-                  >
-                    NO
-                  </Button>
-                </Box>
-              </Box>
-            </Modal> */}
+              {bodyEliminar}
+            </Modal>
           </>
         )}
       </Container>

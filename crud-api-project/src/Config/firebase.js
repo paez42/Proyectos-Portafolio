@@ -5,6 +5,7 @@ import {
   signOut,
 } from "firebase/auth";
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyA6UDuweECHPiuVTIBxQQ857T5zSJkiyB8",
     authDomain: "proyect-crud-auth.firebaseapp.com",

@@ -9,11 +9,10 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import { mainListItems } from "./ListItems";
 import HomePage from "./CrudTable";
 import { useUserContext } from "../../Context/UserContext";
@@ -73,13 +72,13 @@ function DashboardContent() {
     setOpen(!open);
   };
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
-      await logout()
+      await logout();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const { user, setUser } = useUserContext();
 

@@ -4,7 +4,7 @@
       "id": 2,
       "name": "pruebaa",
       "description": "description122",
-      "price": 232
+      "price": "232d"
     },
     {
       "id": 3,
@@ -19,9 +19,9 @@
       "price": "33"
     },
     {
-      "name": "awd",
-      "description": "awdaw",
-      "price": "awdaw",
+      "name": "123",
+      "description": "323",
+      "price": "232",
       "id": 6
     }
   ]
