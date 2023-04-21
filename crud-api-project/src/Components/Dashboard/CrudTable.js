@@ -86,7 +86,7 @@ function HomePage() {
     price: "",
   });
 
-  const handleChangeForm = (e) => {
+  const manejarCambio = (e) => {
     const { name, value } = e.target;
     setConsolaSeleccionada((prevState) => ({
       ...prevState,
@@ -181,21 +181,19 @@ function HomePage() {
       description: "",
       price: "",
     },
-    onSubmit: (formData) => {
-      console.log(formData);
+    onSubmit: (values) => {
+      console.log(values);
     },
   });
-
 
   useEffect(() => {
     setLoading(true);
     peticionGet();
   }, [page, rowsPerPage]);
 
-
   return (
     <>
-      <Container sx={{ my: 5 }}>
+      <Container sx={{ my: 5 }} >
         {loading ? (
           <Box
             sx={{
@@ -278,7 +276,10 @@ function HomePage() {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </TableContainer>
-            <Modal open={modalInsertar} onClose={abrirCerrarModalInsertar}>
+            <Modal
+              open={modalInsertar}
+              onClose={abrirCerrarModalInsertar}
+            >
               <Box
                 sx={{
                   position: "absolute",
@@ -308,19 +309,19 @@ function HomePage() {
                   <TextField
                     name="name"
                     label="Name"
-                    onChange={handleChangeForm}
+                    onChange={manejarCambio}
                     sx={{ mb: 1 }}
                   />
                   <TextField
                     name="description"
                     label="Description"
-                    onChange={handleChangeForm}
+                    onChange={manejarCambio}
                     sx={{ mb: 1 }}
                   />
                   <TextField
                     name="price"
                     label="Price"
-                    onChange={handleChangeForm}
+                    onChange={manejarCambio}
                   />
                 </Box>
                 <Box
@@ -352,7 +353,7 @@ function HomePage() {
                 </Box>
               </Box>
             </Modal>
-            {/* <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
+            <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
               <Box
                 sx={{
                   position: "absolute",
@@ -382,14 +383,14 @@ function HomePage() {
                   <TextField
                     name="name"
                     label="Name"
-                    onChange={handleChange}
+                    onChange={manejarCambio}
                     value={consolaSeleccionada && consolaSeleccionada.name}
                     fullWidth={true}
                   />
                   <TextField
                     name="description"
                     label="Description"
-                    onChange={handleChange}
+                    onChange={manejarCambio}
                     value={
                       consolaSeleccionada && consolaSeleccionada.description
                     }
@@ -397,7 +398,7 @@ function HomePage() {
                   <TextField
                     name="price"
                     label="Price"
-                    onChange={handleChange}
+                    onChange={manejarCambio}
                     value={consolaSeleccionada && consolaSeleccionada.price}
                   />
                 </Box>
@@ -414,6 +415,7 @@ function HomePage() {
                     variant="contained"
                     color="primary"
                     onClick={handleClickEditar}
+                    type="submit"
                   >
                     Editar
                   </Button>
@@ -472,7 +474,7 @@ function HomePage() {
                   </Button>
                 </Box>
               </Box>
-            </Modal> */}
+            </Modal>
           </>
         )}
       </Container>
