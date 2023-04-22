@@ -80,20 +80,6 @@ function HomePage() {
     });
   };
 
-  const [consolaSeleccionada, setConsolaSeleccionada] = useState({
-    name: "",
-    description: "",
-    price: "",
-  });
-
-  const manejarCambio = (e) => {
-    const { name, value } = e.target;
-    setConsolaSeleccionada((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   const peticionGet = async () => {
     setLoading(true);
     axios
@@ -109,7 +95,7 @@ function HomePage() {
   const peticionPost = async () => {
     setLoading(true);
     axios
-      .post("http://localhost:5000/products/", consolaSeleccionada)
+      .post("http://localhost:5000/products/", formik.values)
       .then((res) => {
         setData(data.concat(res.data));
         abrirCerrarModalInsertar();
@@ -177,14 +163,16 @@ function HomePage() {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      name: "", 
       description: "",
       price: "",
     },
     onSubmit: (values) => {
       console.log(values);
+      handleClickInsertar();
     },
   });
+
 
   useEffect(() => {
     setLoading(true);
@@ -292,6 +280,7 @@ function HomePage() {
                   transform: "translate(-50%, -50%)",
                   backgroundColor: "white",
                 }}
+                component="form"
                 onSubmit={formik.handleSubmit}
               >
                 <Typography variant="h4" textAlign={"center"} mx={1}>
@@ -309,19 +298,19 @@ function HomePage() {
                   <TextField
                     name="name"
                     label="Name"
-                    onChange={manejarCambio}
+                    onChange={formik.handleChange}
                     sx={{ mb: 1 }}
                   />
                   <TextField
                     name="description"
                     label="Description"
-                    onChange={manejarCambio}
+                    onChange={formik.handleChange}
                     sx={{ mb: 1 }}
                   />
                   <TextField
                     name="price"
                     label="Price"
-                    onChange={manejarCambio}
+                    onChange={formik.handleChange}
                   />
                 </Box>
                 <Box
@@ -336,11 +325,10 @@ function HomePage() {
                   <Button
                     color="primary"
                     variant="contained"
-                    onClick={handleClickInsertar}
                     sx={{ mr: 1 }}
                     type="submit"
                   >
-                    Insertar
+                    nico
                   </Button>
 
                   <Button
@@ -352,7 +340,7 @@ function HomePage() {
                   </Button>
                 </Box>
               </Box>
-            </Modal>
+             </Modal>
             <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
               <Box
                 sx={{
