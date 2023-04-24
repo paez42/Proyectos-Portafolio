@@ -34,6 +34,7 @@ const HomePage = ({ prodId }) => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [prodData, setProdData] = useState(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -92,7 +93,7 @@ const HomePage = ({ prodId }) => {
       });
   };
 
-  /* const peticionPost = async () => {
+  const peticionPost = async () => {
     setLoading(true);
     axios
       .post("http://localhost:5000/products/", values)
@@ -125,11 +126,9 @@ const HomePage = ({ prodId }) => {
       .finally(() => {
         setLoading(false);
       });
-  }; */
+  };
 
-  const [prodData, setProdData] = useState(null);
-
-  /*   const peticionDelete = async () => {
+  const peticionDelete = async () => {
     setLoading(true);
     axios
       .delete("http://localhost:5000/products/" + values.id)
@@ -140,7 +139,14 @@ const HomePage = ({ prodId }) => {
       .finally(() => {
         setLoading(false);
       });
-  }; */
+  };
+
+  const fetchUserData = async () => {
+    const response = await axios.get(
+      `http://localhost:5000/products/${userId}`
+    );
+    setProdData(response.data);
+  };
 
   const abrirCerrarModalInsertar = () => {
     setModalInsertar(!modalInsertar);
@@ -251,9 +257,9 @@ const HomePage = ({ prodId }) => {
             </TableContainer>
             <Formik
               initialValues={{
-                name: "",
-                description: "",
-                price: "",
+                name: prodData.name,
+                description: prodData.description,
+                price: prodData.price,
               }}
               validationSchema={validationSchema}
               onSubmit={(values, { setSubmitting }) => {
@@ -359,7 +365,7 @@ const HomePage = ({ prodId }) => {
                       </Box>
                     </Box>
                   </Modal>
-                  <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
+                  {/*      <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
                     <Box
                       sx={{
                         position: "absolute",
@@ -483,7 +489,7 @@ const HomePage = ({ prodId }) => {
                         </Button>
                       </Box>
                     </Box>
-                  </Modal>
+                  </Modal> */}
                 </>
               )}
             </Formik>
