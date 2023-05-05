@@ -2,7 +2,7 @@
   "products": [
     {
       "id": 2,
-      "name": "prueba",
+      "name": "pruebaddd",
       "description": "description122",
       "price": "232d"
     },
@@ -41,18 +41,6 @@
       "description": "asdawd",
       "price": "awd",
       "id": 17
-    },
-    {
-      "name": "zzzzzz",
-      "description": "zzzz",
-      "price": "zzz",
-      "id": 18
-    },
-    {
-      "name": "111",
-      "description": "11",
-      "price": "111",
-      "id": 19
     }
   ]
 }
