@@ -97,6 +97,7 @@ function HomePage() {
       .get(`https://backenddata-tflk.onrender.com/products/?_page=${page}`)
       .then((res) => {
         setData(res.data);
+        console.log(res);
       })
       .finally(() => {
         setLoading(false);
@@ -123,7 +124,7 @@ function HomePage() {
     setLoading(true);
     axios
       .put(
-        "https://backenddata-tflk.onrender.com/products" +
+        "https://backenddata-tflk.onrender.com/products/" +
           consolaSeleccionada.id,
         consolaSeleccionada
       )
@@ -147,7 +148,10 @@ function HomePage() {
   const peticionDelete = async () => {
     setLoading(true);
     axios
-      .delete("http://localhost:5000/products/" + consolaSeleccionada.id)
+      .delete(
+        "https://backenddata-tflk.onrender.com/products/" +
+          consolaSeleccionada.id
+      )
       .then((res) => {
         setData(
           data.filter((consola) => consola.id !== consolaSeleccionada.id)

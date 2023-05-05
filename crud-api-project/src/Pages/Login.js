@@ -29,28 +29,24 @@ export default function SignInSide() {
     if (user) navigate("/dashboard");
   }, [user]);
 
-  const onSubmit = async (
-    values,
-    { setSubmitting, setErrors, resetForm }
-) => {
+  const onSubmit = async (values, { setSubmitting, setErrors, resetForm }) => {
     try {
-        await login({ email: values.email, password: values.password });
-        console.log("user logged in");
-        resetForm();
+      await login({ email: values.email, password: values.password });
+      console.log("user logged in");
+      resetForm();
     } catch (error) {
-        console.log(error.code);
-        console.log(error.message);
-        if (error.code === "auth/user-not-found") {
-            setErrors({ email: "Email no Registrado" });
-        }
-        if (error.code === "auth/wrong-password") {
-            setErrors({ password: "Contraseña incorrecta" });
-        }
+      console.log(error.code);
+      console.log(error.message);
+      if (error.code === "auth/user-not-found") {
+        setErrors({ email: "Email no Registrado" });
+      }
+      if (error.code === "auth/wrong-password") {
+        setErrors({ password: "Contraseña incorrecta" });
+      }
     } finally {
-        setSubmitting(false);
+      setSubmitting(false);
     }
-};
-
+  };
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Email no válido").required("Email Requerido"),
@@ -132,9 +128,9 @@ export default function SignInSide() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={errors.email && touched.email}
-                    helperText= {errors.email && touched.email && errors.email}
+                    helperText={errors.email && touched.email && errors.email}
                   />
-                 
+
                   <TextField
                     margin="normal"
                     required
@@ -148,9 +144,11 @@ export default function SignInSide() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={errors.password && touched.password}
-                    helperText= {errors.password && touched.password && errors.password}
+                    helperText={
+                      errors.password && touched.password && errors.password
+                    }
                   />
-    
+
                   <Button
                     type="submit"
                     fullWidth
@@ -163,6 +161,17 @@ export default function SignInSide() {
                 </Box>
               )}
             </Formik>
+            <Box
+              sx={{
+                padding: 2,
+                backgroundColor: "lightgreen",
+                mt: 11,
+                border: "1px solid green",
+              }}
+            >
+              <strong>email default:</strong> test@test.com <br />
+              <strong>password default:</strong> 123456
+            </Box>
           </Box>
         </Grid>
       </Grid>
